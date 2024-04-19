@@ -1,4 +1,4 @@
-import { todoList, mainInput } from "./nodes.js";
+import { todoList } from "./nodes.js";
 const data = [];
 
 function generateUniqueId() {
@@ -33,8 +33,6 @@ function newTodo(text) {
   div.append(input, lable, button);
   li.appendChild(div);
   todoList.appendChild(li);
-
-  mainInput.value = "";
 }
 
 function onCompleted(li, id) {
