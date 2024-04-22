@@ -80,4 +80,4 @@ function onDelete(li) {
   li.remove();
 }
 
-export { newTodo };
+export { newTodo, data };
