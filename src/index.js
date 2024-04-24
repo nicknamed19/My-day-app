@@ -1,6 +1,6 @@
 import "./css/base.css";
-import { mainInput } from "./js/nodes.js";
-import { newTodo, onCounter, showData } from "./js/utils.js";
+import { mainInput, clearCompleted } from "./js/nodes.js";
+import { newTodo, onCounter, showData, clear } from "./js/utils.js";
 
 let textValue = "";
 
@@ -18,5 +18,7 @@ mainInput.addEventListener("input", (event) => {
   const value = event.target.value.trim();
   textValue = value;
 });
+
+clearCompleted.addEventListener("click", clear);
 
 showData();

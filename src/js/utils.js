@@ -1,4 +1,10 @@
-import { todoList, strongCounter, footer, sectionMain, counter } from "./nodes.js";
+import {
+  todoList,
+  strongCounter,
+  footer,
+  sectionMain,
+  counter,
+} from "./nodes.js";
 
 const data = [];
 let editInputValue = "";
@@ -14,37 +20,49 @@ function newTodo(text) {
     id: generateUniqueId(),
   };
   data.push(newObj);
+  renderTodos(newObj);
+}
 
-  const li = document.createElement("li");
+function renderTodos() {
+  const fragment = document.createDocumentFragment();
+  todoList.innerHTML = "";
 
-  const div = document.createElement("div");
-  div.classList.add("view");
+  data.forEach((obj) => {
+    const li = document.createElement("li");
 
-  const input = document.createElement("input");
-  input.classList.add("toggle");
-  input.type = "checkbox";
-  input.addEventListener("click", () => onCompleted(li, newObj.id));
+    const div = document.createElement("div");
+    div.classList.add("view");
 
-  const lable = document.createElement("label");
-  lable.textContent = text;
-  lable.addEventListener("dblclick", () => onEdit(li, { lable, editInput }));
+    const input = document.createElement("input");
+    input.classList.add("toggle");
+    input.type = "checkbox";
+    input.addEventListener("click", () => onCompleted(li, obj.id));
 
-  const button = document.createElement("button");
-  button.classList.add("destroy");
-  button.addEventListener("click", () => onDelete(li, newObj.id));
+    const lable = document.createElement("label");
+    lable.textContent = obj.title;
+    lable.addEventListener("dblclick", () =>
+      onEdit(li, { lable, editInput, id: obj.id })
+    );
 
-  const editInput = document.createElement("input");
-  editInput.classList.add("edit");
-  editInput.value = text;
-  editInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && editInputValue.length >= 1) {
-      onEdit(li, { finish: true });
-    }
+    const button = document.createElement("button");
+    button.classList.add("destroy");
+    button.addEventListener("click", () => onDelete(li, obj.id));
+
+    const editInput = document.createElement("input");
+    editInput.classList.add("edit");
+    editInput.value = obj.title;
+    editInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && editInputValue.length >= 1) {
+        onEdit(li, { finish: true });
+      }
+    });
+
+    div.append(input, lable, button);
+    li.append(div, editInput);
+
+    fragment.appendChild(li);
+    todoList.appendChild(fragment);
   });
-
-  div.append(input, lable, button);
-  li.append(div, editInput);
-  todoList.appendChild(li);
 }
 
 function onCompleted(li, id) {
@@ -57,17 +75,19 @@ function onCompleted(li, id) {
   onCounter();
 }
 
-function onEdit(li, { finish = false, lable, editInput } = {}) {
+function onEdit(li, { finish = false, lable, editInput, id } = {}) {
   li.classList.toggle("editing");
 
   if (!finish) {
     editInput.focus();
     const initialValue = lable.textContent;
     editInput.value = initialValue;
+    const todoToEdit = data.filter((obj) => obj.id === id);
 
     editInput.addEventListener("input", (event) => {
       const value = event.target.value.trim();
       editInputValue = value;
+      todoToEdit[0].title = editInputValue;
       lable.textContent = editInputValue;
     });
 
@@ -108,4 +128,13 @@ function showData() {
   }
 }
 
-export { newTodo, data, onCounter, showData };
+function clear() {
+  const completedTodos = data.filter((obj) => !!obj.completed);
+  completedTodos.forEach((obj) => {
+    const indexObj = data.findIndex((dataObj) => dataObj.id === obj.id);
+    data.splice(indexObj, 1);
+  });
+  renderTodos();
+}
+
+export { newTodo, data, onCounter, showData, clear };
