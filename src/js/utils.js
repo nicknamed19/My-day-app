@@ -1,4 +1,5 @@
-import { todoList } from "./nodes.js";
+import { todoList, strongCounter, footer, sectionMain, counter } from "./nodes.js";
+
 const data = [];
 let editInputValue = "";
 
@@ -30,7 +31,7 @@ function newTodo(text) {
 
   const button = document.createElement("button");
   button.classList.add("destroy");
-  button.addEventListener("click", () => onDelete(li));
+  button.addEventListener("click", () => onDelete(li, newObj.id));
 
   const editInput = document.createElement("input");
   editInput.classList.add("edit");
@@ -53,6 +54,7 @@ function onCompleted(li, id) {
   filterArray.forEach((obj) =>
     obj.completed ? (obj.completed = false) : (obj.completed = true)
   );
+  onCounter();
 }
 
 function onEdit(li, { finish = false, lable, editInput } = {}) {
@@ -62,11 +64,13 @@ function onEdit(li, { finish = false, lable, editInput } = {}) {
     editInput.focus();
     const initialValue = lable.textContent;
     editInput.value = initialValue;
+
     editInput.addEventListener("input", (event) => {
       const value = event.target.value.trim();
       editInputValue = value;
       lable.textContent = editInputValue;
     });
+
     editInput.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         li.classList.remove("editing");
@@ -76,8 +80,32 @@ function onEdit(li, { finish = false, lable, editInput } = {}) {
   }
 }
 
-function onDelete(li) {
+function onDelete(li, id) {
+  const objIndex = data.findIndex((obj) => obj.id === id);
+  data.splice(objIndex, 1);
   li.remove();
+  onCounter();
 }
 
-export { newTodo, data };
+function onCounter() {
+  const itemsLeft = data.filter((obj) => !obj.completed);
+  strongCounter.textContent = itemsLeft.length;
+
+  const itemText = counter.childNodes[1];
+  itemsLeft.length === 1
+    ? (itemText.textContent = " item left")
+    : (itemText.textContent = " items left");
+  data.length < 1 && showData();
+}
+
+function showData() {
+  if (data.length < 1) {
+    sectionMain.classList.add("hidden");
+    footer.classList.add("hidden");
+  } else {
+    sectionMain.classList.remove("hidden");
+    footer.classList.remove("hidden");
+  }
+}
+
+export { newTodo, data, onCounter, showData };
