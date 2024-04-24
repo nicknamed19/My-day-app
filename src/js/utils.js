@@ -135,6 +135,7 @@ function clear() {
     data.splice(indexObj, 1);
   });
   renderTodos();
+  showData();
 }
 
 export { newTodo, data, onCounter, showData, clear };
