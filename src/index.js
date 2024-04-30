@@ -1,6 +1,6 @@
 import "./css/base.css";
 import { mainInput, clearCompleted } from "./js/nodes.js";
-import { newTodo, onCounter, showData, clear } from "./js/utils.js";
+import { newTodo, showData, clear } from "./js/utils.js";
 
 let textValue = "";
 
@@ -10,7 +10,6 @@ mainInput.addEventListener("keydown", (event) => {
     textValue = "";
     mainInput.value = "";
     showData();
-    onCounter();
   }
 });
 
