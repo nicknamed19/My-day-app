@@ -68,7 +68,7 @@ function renderTodos() {
     fragment.appendChild(li);
     todoList.appendChild(fragment);
   });
-
+  onCounter();
   useLocalStorage("mydayapp-js", data);
 }
 
@@ -78,7 +78,6 @@ function onCompleted(id) {
   filterArray.forEach((obj) =>
     obj.completed ? (obj.completed = false) : (obj.completed = true)
   );
-  onCounter();
   renderTodos();
 }
 
@@ -113,7 +112,6 @@ function onDelete(id) {
   const objIndex = data.findIndex((obj) => obj.id === id);
   data.splice(objIndex, 1);
   renderTodos();
-  onCounter();
 }
 
 function onCounter() {
