@@ -5,8 +5,9 @@ import {
   sectionMain,
   counter,
 } from "./nodes.js";
+import { useLocalStorage } from "./localStorage.js";
 
-const data = [];
+const { parsedTodos: data } = useLocalStorage("mydayapp-js", []);
 let editInputValue = "";
 
 function generateUniqueId() {
@@ -36,7 +37,7 @@ function renderTodos() {
     const input = document.createElement("input");
     input.classList.add("toggle");
     input.type = "checkbox";
-    input.addEventListener("click", () => onCompleted(li, obj.id));
+    input.addEventListener("click", () => onCompleted(obj.id));
 
     const lable = document.createElement("label");
     lable.textContent = obj.title;
@@ -46,7 +47,7 @@ function renderTodos() {
 
     const button = document.createElement("button");
     button.classList.add("destroy");
-    button.addEventListener("click", () => onDelete(li, obj.id));
+    button.addEventListener("click", () => onDelete(obj.id));
 
     const editInput = document.createElement("input");
     editInput.classList.add("edit");
@@ -57,22 +58,28 @@ function renderTodos() {
       }
     });
 
+    obj.completed
+      ? (li.classList.add("completed"), (input.checked = true))
+      : (li.classList.remove("completed"), (input.checked = false));
+
     div.append(input, lable, button);
     li.append(div, editInput);
 
     fragment.appendChild(li);
     todoList.appendChild(fragment);
   });
+
+  useLocalStorage("mydayapp-js", data);
 }
 
-function onCompleted(li, id) {
-  li.classList.toggle("completed");
-
+function onCompleted(id) {
   const filterArray = data.filter((obj) => obj.id === id);
+
   filterArray.forEach((obj) =>
     obj.completed ? (obj.completed = false) : (obj.completed = true)
   );
   onCounter();
+  renderTodos();
 }
 
 function onEdit(li, { finish = false, lable, editInput, id } = {}) {
@@ -97,13 +104,15 @@ function onEdit(li, { finish = false, lable, editInput, id } = {}) {
         lable.textContent = initialValue;
       }
     });
+  } else {
+    renderTodos();
   }
 }
 
-function onDelete(li, id) {
+function onDelete(id) {
   const objIndex = data.findIndex((obj) => obj.id === id);
   data.splice(objIndex, 1);
-  li.remove();
+  renderTodos();
   onCounter();
 }
 
@@ -125,6 +134,8 @@ function showData() {
   } else {
     sectionMain.classList.remove("hidden");
     footer.classList.remove("hidden");
+    renderTodos();
+    onCounter();
   }
 }
 
@@ -138,4 +149,4 @@ function clear() {
   showData();
 }
 
-export { newTodo, data, onCounter, showData, clear };
+export { newTodo, data, showData, clear };
