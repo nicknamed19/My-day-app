@@ -4,6 +4,9 @@ import {
   footer,
   sectionMain,
   counter,
+  completedBtn,
+  pendingBtn,
+  allBtn,
 } from "./nodes.js";
 import { useLocalStorage } from "./localStorage.js";
 
@@ -21,14 +24,14 @@ function newTodo(text) {
     id: generateUniqueId(),
   };
   data.push(newObj);
-  renderTodos(newObj);
+  renderTodos(data);
 }
 
-function renderTodos() {
+function renderTodos(arr) {
   const fragment = document.createDocumentFragment();
   todoList.innerHTML = "";
 
-  data.forEach((obj) => {
+  arr.forEach((obj) => {
     const li = document.createElement("li");
 
     const div = document.createElement("div");
@@ -78,7 +81,7 @@ function onCompleted(id) {
   filterArray.forEach((obj) =>
     obj.completed ? (obj.completed = false) : (obj.completed = true)
   );
-  renderTodos();
+  renderTodos(data);
 }
 
 function onEdit(li, { finish = false, lable, editInput, id } = {}) {
@@ -104,14 +107,14 @@ function onEdit(li, { finish = false, lable, editInput, id } = {}) {
       }
     });
   } else {
-    renderTodos();
+    renderTodos(data);
   }
 }
 
 function onDelete(id) {
   const objIndex = data.findIndex((obj) => obj.id === id);
   data.splice(objIndex, 1);
-  renderTodos();
+  renderTodos(data);
 }
 
 function onCounter() {
@@ -132,7 +135,7 @@ function showData() {
   } else {
     sectionMain.classList.remove("hidden");
     footer.classList.remove("hidden");
-    renderTodos();
+    renderTodos(data);
     onCounter();
   }
 }
@@ -143,8 +146,42 @@ function clear() {
     const indexObj = data.findIndex((dataObj) => dataObj.id === obj.id);
     data.splice(indexObj, 1);
   });
-  renderTodos();
+  renderTodos(data);
   showData();
 }
 
-export { newTodo, data, showData, clear };
+function ShowCompleted() {
+  const completedData = data.filter((obj) => obj.completed);
+  completedBtn.classList.add("selected");
+  pendingBtn.classList.remove("selected");
+  allBtn.classList.remove("selected");
+  renderTodos(completedData);
+}
+
+function showPending() {
+  const pendingData = data.filter((obj) => !obj.completed);
+  completedBtn.classList.remove("selected");
+  pendingBtn.classList.add("selected");
+  allBtn.classList.remove("selected");
+  renderTodos(pendingData);
+}
+
+function showAll() {
+  completedBtn.classList.remove("selected");
+  pendingBtn.classList.remove("selected");
+  allBtn.classList.add("selected");
+  renderTodos(data);
+}
+
+function navigator() {
+  if (location.hash === "#/pending") {
+    showPending();
+  } else if (location.hash === "#/completed") {
+    ShowCompleted();
+  } else {
+    location.hash = "#/";
+    showAll();
+  }
+}
+
+export { newTodo, data, showData, clear, showPending, ShowCompleted, showAll, navigator };
