@@ -5,6 +5,9 @@ const mainInput = document.querySelector(".new-todo");
 const counter = document.querySelector(".todo-count");
 const strongCounter = document.querySelector("#strong-counter");
 const clearCompleted = document.querySelector(".clear-completed");
+const pendingBtn = document.querySelector("#pending");
+const completedBtn = document.querySelector("#completed");
+const allBtn = document.querySelector("#all");
 
 export {
   sectionMain,
@@ -14,4 +17,7 @@ export {
   counter,
   strongCounter,
   clearCompleted,
+  pendingBtn,
+  completedBtn,
+  allBtn,
 };
