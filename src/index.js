@@ -1,9 +1,33 @@
 import "./css/base.css";
-import { mainInput, clearCompleted } from "./js/nodes.js";
-import { newTodo, showData, clear } from "./js/utils.js";
+import {
+  mainInput,
+  clearCompleted,
+  pendingBtn,
+  completedBtn,
+  allBtn,
+} from "./js/nodes.js";
+
+import {
+  newTodo,
+  showData,
+  clear,
+  showPending,
+  ShowCompleted,
+  showAll,
+  navigator,
+} from "./js/utils.js";
+
+window.addEventListener(
+  "load",
+  () => {
+    showData();
+    navigator();
+  },
+  false
+);
+window.addEventListener("hashchange", navigator, false);
 
 let textValue = "";
-
 mainInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && textValue.length >= 1) {
     newTodo(textValue);
@@ -19,5 +43,6 @@ mainInput.addEventListener("input", (event) => {
 });
 
 clearCompleted.addEventListener("click", clear);
-
-showData();
+pendingBtn.addEventListener("click", showPending);
+completedBtn.addEventListener("click", ShowCompleted);
+allBtn.addEventListener("click", showAll);
