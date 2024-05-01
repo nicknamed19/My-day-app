@@ -184,4 +184,13 @@ function navigator() {
   }
 }
 
-export { newTodo, data, showData, clear, showPending, ShowCompleted, showAll, navigator };
+export {
+  newTodo,
+  data,
+  showData,
+  clear,
+  showPending,
+  ShowCompleted,
+  showAll,
+  navigator,
+};
