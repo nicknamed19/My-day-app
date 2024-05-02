@@ -18,7 +18,7 @@ import {
 } from "./js/utils.js";
 
 window.addEventListener(
-  "load",
+  "DOMContentLoaded",
   () => {
     showData();
     navigator();
