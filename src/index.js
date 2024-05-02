@@ -17,14 +17,7 @@ import {
   navigator,
 } from "./js/utils.js";
 
-window.addEventListener(
-  "DOMContentLoaded",
-  () => {
-    showData();
-    navigator();
-  },
-  false
-);
+window.addEventListener("DOMContentLoaded", navigator, false);
 window.addEventListener("hashchange", navigator, false);
 
 let textValue = "";
@@ -46,3 +39,5 @@ clearCompleted.addEventListener("click", clear);
 pendingBtn.addEventListener("click", showPending);
 completedBtn.addEventListener("click", ShowCompleted);
 allBtn.addEventListener("click", showAll);
+
+showData();
