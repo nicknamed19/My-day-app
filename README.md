@@ -1,4 +1,4 @@
-## MyDayApp - JavaScript
+# MyDayApp - JavaScript
 
 MyDayApp es una aplicación para gestionar tareas de forma sencilla y fácil.
 [Visit here](https://nicknamed19.github.io/My-day-app/)
